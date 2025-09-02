@@ -11,7 +11,7 @@ import os
 load_dotenv()
 
 class BaseAgent():
-    def __init__(self, model_name: str, system_prompt:str=""):
+    def __init__(self, model_name: str, system_prompt:str="You are an AI agent with tool calling abilities "):
         self.model_name = model_name
         self.config = None
 
@@ -21,9 +21,7 @@ class BaseAgent():
                 api_key = os.getenv("GOOGLE_API")
                 self.client = genai.Client(api_key=api_key)
                 self.chat_function = self.client.models.generate_content #Python magic, pass the function into a variable/object
-                self.config = types.GenerateContentConfig(
-                    system_instruction=system_prompt
-                )
+                self.config = types.GenerateContentConfig(system_instruction=system_prompt)
                 
 
             case model_name if "gpt" in model_name:
@@ -48,9 +46,6 @@ class BaseAgent():
         output = self.chat_function(model=self.model_name, contents=input, config=custom_configuration)
         return output
         
-
-
-
 
 
 if __name__ == "__main__":
