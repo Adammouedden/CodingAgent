@@ -11,7 +11,8 @@ import os
 import json
 import subprocess #For executing commands on the terminal
 
-class CodeSchema(BaseModel):
+class CodeSchema(BaseModel): 
+
     #Enable field validation from pydantic
     model_config = ConfigDict(validate_default=True)
 
@@ -33,8 +34,8 @@ class CodeSchema(BaseModel):
             raise ValueError("[DEBUG] command required when kind='command'")
         return v
 
-class ArrayOfCode(BaseModel):
-    Output: List[CodeSchema]
+class ArrayOfCode(BaseModel): #This will result in the LLM returning a dictionary
+    commands: List[CodeSchema]
 
 class CodingAgent(BaseAgent):
     def __init__(self, model_name:str, system_prompt:str="", input:str=""):
@@ -47,10 +48,9 @@ class CodingAgent(BaseAgent):
         print(self.gemini_output.text)
         print(self.gemini_output.parsed)
 
-        with open("test2.txt", "w") as f:
+        with open("code_example1.txt", "w") as f:
             f.write(str(self.gemini_output.parsed))
-        #with open("example.txt", "r") as f:
-            #self.example_output_JSON = f.read()
+        
         
 
     def run_subprocess():
