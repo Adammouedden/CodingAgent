@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Software Engineer - Personal Portfolio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            transition: background-color 0.3s ease;
+        }
+        nav ul li a:hover {
+            background-color: #34495e;
+            border-radius: 4px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
+        section {
+            padding: 60px 0;
+            border-bottom: 1px solid #eee;
+        }
+        section:last-child {
+            border-bottom: none;
+        }
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: #3498db;
+            margin: 10px auto 0;
+        }
+        #hero {
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 500px;
+        }
+        #hero .hero-content {
+            max-width: 800px;
+        }
+        #hero h2 {
+            color: white;
+            font-size: 3.5em;
+            margin-bottom: 20px;
+        }
+        #hero h2::after {
+            background-color: white;
+        }
+        #hero p {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #c0392b;
+        }
+        #about img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 30px auto;
+            object-fit: cover;
+            border: 5px solid #3498db;
+        }
+        #about p {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1em;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        .skill-item {
+            background-color: white;
+            padding: 30px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .skill-item:hover {
+            transform: translateY(-5px);
+        }
+        .skill-item h3 {
+            color: #3498db;
+            margin-top: 0;
+        }
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .project-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .project-card:hover {
+            transform: translateY(-10px);
+        }
+        .project-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        .project-content {
+            padding: 25px;
+        }
+        .project-content h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+        .project-content p {
+            font-size: 0.95em;
+            color: #555;
+        }
+        .project-content a {
+            display: inline-block;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .project-content a:hover {
+            text-decoration: underline;
+        }
+        #contact .contact-info {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+        #contact .contact-info p {
+            margin-bottom: 10px;
+        }
+        #contact .contact-info a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        #contact .contact-info a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            nav ul {
+                flex-direction: column;
+            }
+            nav ul li {
+                margin: 5px 0;
+            }
+            #hero h2 {
+                font-size: 2.5em;
+            }
+            #hero p {
+                font-size: 1.1em;
+            }
+            h2 {
+                font-size: 1.8em;
+            }
+            section {
+                padding: 40px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>[Your Name]</h1>
+            <nav>
+                <ul>
+                    <li><a href="#hero">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="hero">
+        <div class="hero-content">
+            <h2>Innovating with Intelligence.</h2>
+            <p>I'm an AI-focused Software Engineer passionate about building intelligent systems that solve real-world problems.</p>
+            <a href="#projects" class="btn">View My Projects</a>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <h2>About Me</h2>
+            <img src="https://via.placeholder.com/200" alt="Profile Picture">
+            <p>
+                Hello! I'm [Your Name], an AI-focused Software Engineer with a deep interest in machine learning, deep learning, and data science. My journey in technology has led me to explore how artificial intelligence can transform industries and enhance human capabilities. From developing robust backend systems to implementing cutting-edge AI models, I thrive on creating innovative solutions.
+            </p>
+            <p>
+                I enjoy tackling complex challenges, optimizing algorithms, and turning data into actionable insights. My goal is to contribute to projects that push the boundaries of what's possible with AI, always focusing on scalability, efficiency, and ethical considerations.
+            </p>
+        </div>
+    </section>
+
+    <section id="skills">
+        <div class="container">
+            <h2>Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <h3>Programming Languages</h3>
+                    <p>Python, Java, C++, JavaScript</p>
+                </div>
+                <div class="skill-item">
+                    <h3>AI/ML Frameworks</h3>
+                    <p>TensorFlow, PyTorch, Keras, Scikit-learn</p>
+                </div>
+                <div class="skill-item">
+                    <h3>Cloud Platforms</h3>
+                    <p>AWS (Sagemaker, EC2, S3), Google Cloud (AI Platform), Azure ML</p>
+                </div>
+                <div class="skill-item">
+                    <h3>Data & Databases</h3>
+                    <p>SQL (PostgreSQL, MySQL), MongoDB, Pandas, NumPy</p>
+                </div>
+                <div class="skill-item">
+                    <h3>Tools & Technologies</h3>
+                    <p>Git, Docker, Kubernetes, FastAPI, Flask, REST APIs</p>
+                </div>
+                <div class="skill-item">
+                    <h3>Concepts</h3>
+                    <p>Machine Learning, Deep Learning, NLP, Computer Vision, MLOps, Data Engineering</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="container">
+            <h2>My Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/400x200/3498db/FFFFFF?text=Project+1" alt="Project 1">
+                    <div class="project-content">
+                        <h3>Natural Language Processing Model</h3>
+                        <p>Developed a sentiment analysis model using Transformer architectures and fine-tuned it on a custom dataset, achieving 92% accuracy.</p>
+                        <a href="#" target="_blank">View Project</a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/400x200/e67e22/FFFFFF?text=Project+2" alt="Project 2">
+                    <div class="project-content">
+                        <h3>Image Recognition System</h3>
+                        <p>Built a real-time object detection system for autonomous vehicles using YOLOv5 and deployed it on an edge device.</p>
+                        <a href="#" target="_blank">View Project</a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/400x200/27ae60/FFFFFF?text=Project+3" alt="Project 3">
+                    <div class="project-content">
+                        <h3>Predictive Analytics Dashboard</h3>
+                        <p>Created a full-stack web application to predict stock prices using time-series forecasting models (LSTM) and visualize results.</p>
+                        <a href="#" target="_blank">View Project</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <p style="text-align: center;">I'm always open to new opportunities, collaborations, or just a friendly chat about AI. Feel free to reach out!</p>
+            <div class="contact-info">
+                <p>Email: <a href="mailto:your.email@example.com">your.email@example.com</a></p>
+                <p>LinkedIn: <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a></p>
+                <p>GitHub: <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 [Your Name]. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

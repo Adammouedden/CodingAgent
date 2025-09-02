@@ -13,10 +13,11 @@ import subprocess #For executing commands on the terminal
 from pathlib import Path
 
 #Debugging flags
-
-writing_code = False
+writing_code = True
 pydantic_test = False
 
+
+#Source code begins
 class CodeSchema(BaseModel): 
 
     #Enable field validation from pydantic
@@ -51,6 +52,17 @@ class CodingAgent(BaseAgent):
                                                     response_mime_type="application/json",
                                                     response_schema=ArrayOfCode)
 
+        with open("cached_code/counter.txt", "r+") as f:
+                counter = int(f.read())
+                if(writing_code):
+                    counter += 1
+                f.seek(0)
+                f.write(str(counter))
+            
+            
+        self.example_filename = f"code_example{counter}.txt"
+        
+        
     def write_code(self, input:str=""):
         self.gemini_output = self.call_LLM(input, self.config)
         #print(self.gemini_output.text)
@@ -64,17 +76,18 @@ class CodingAgent(BaseAgent):
 
             payload = [commands.model_dump() for c in commands]
             
+
+            
             #Dumps the pydantic model data into JSON
-            with open("cached_code\code_example1.txt", "w") as f:
+            with open(f"cached_code/{self.example_filename}", "w") as f:
                 json.dump(payload, f, ensure_ascii=False, indent=2)
         
         
     def load_code(self):
         #Testing
         #Read saved code from the cache to reduce API useage during testing
-        with open("cached_code\code_example1.txt", "r") as f:
+        with open(f"cached_code/{self.example_filename}", "r") as f:
             commands_cached = f.read()
-        
 
         cached_dict = json.loads(commands_cached) #Convert string to dictionary
 
@@ -90,40 +103,40 @@ class CodingAgent(BaseAgent):
     def execute(self, commands:List):
         data = commands[0]["commands"]
         output = []
-       
+        result = None
+        working_directory = Path("agent_generated_code")
+        
         for command in data:
            
             match command['kind']:
                 case "code":
-                    with open(command["filename"], "w") as f: 
+                    with open(f"agent_generated_code/{command["filename"]}", "w") as f: 
                         text = "\n".join(command["code"])
                         f.write(text)
 
                 case "command":
                     
                     try:
-                        result = subprocess.run(["cmd", "/c", command["command"]], stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=5, check=True)
-                        
+                        result = subprocess.run(["cmd", "/c", command["command"]], cwd=working_directory, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=30, check=True)
+                        output.append(result.stdout)
                     except subprocess.TimeoutExpired as e:
-                        print(f"Process took too long (> {e.timeout} seconds), killing it.")
+                        print(f"[DEBUG] Process took too long (> {e.timeout} seconds), killing it.")
                     except subprocess.CalledProcessError as e:
-                        print(f"Process failed with exit code {e.returncode}")
-
-                    output.append(result.stdout)
-            
+                        print(f"[DEBUG] Process failed with exit code {e.returncode}")  
         return output
     
     def coding_agent(self, input:str):
         self.write_code(input)
         commands = self.load_code()
-        self.execute(commands)
+        output = self.execute(commands)
+        print(output)
 
 
 if __name__ == "__main__":
-    with open("cached_code\system_prompt.txt", "r") as f:
+    with open("cached_code/system_prompt.txt", "r") as f:
         prompt = f.read()
 
-    input = "Use python to build an interactive game of connect 4, make it have a GUI but play it yourself instead of awaiting user input. No infinite loops."
+    input = "Build me an AI agent that uses OpenAI (You can just leave the API key blank) and works through Azure AD. I want it to also have tool calling abilities so that it can call PowerBI API to build PowerBI dashboards given only an excel file and input text. Make this a chatbot with a GUI and create your own folder to save your files."
 
     agent = CodingAgent("gemini-2.5-flash", system_prompt=prompt)
 
