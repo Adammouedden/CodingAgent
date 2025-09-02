@@ -62,17 +62,17 @@ class CodingAgent(BaseAgent):
         else:
             commands = self.gemini_output.parsed
 
-        payload = [commands.model_dump() for c in commands]
-        
-        #Dumps the pydantic model data into JSON
-        with open("code_example1.txt", "w") as f:
-            json.dump(payload, f, ensure_ascii=False, indent=2)
+            payload = [commands.model_dump() for c in commands]
+            
+            #Dumps the pydantic model data into JSON
+            with open("cached_code\code_example1.txt", "w") as f:
+                json.dump(payload, f, ensure_ascii=False, indent=2)
         
         
     def load_code(self):
         #Testing
         #Read saved code from the cache to reduce API useage during testing
-        with open("code_example1.txt", "r") as f:
+        with open("cached_code\code_example1.txt", "r") as f:
             commands_cached = f.read()
         
 
@@ -87,7 +87,7 @@ class CodingAgent(BaseAgent):
         print(output)
 
 
-    def execute(self, commands):
+    def execute(self, commands:List):
         data = commands[0]["commands"]
         output = []
        
@@ -100,22 +100,30 @@ class CodingAgent(BaseAgent):
                         f.write(text)
 
                 case "command":
-                    result = subprocess.run(["cmd", "/c", command["command"]], capture_output=True, text=True)
-
-                    if result.returncode != 0:
-                        print(f"An error has occured while executing: {result.stderr}")
-                        raise ValueError("[DEBUG] Command error")
+                    
+                    try:
+                        result = subprocess.run(["cmd", "/c", command["command"]], stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=5, check=True)
+                        
+                    except subprocess.TimeoutExpired as e:
+                        print(f"Process took too long (> {e.timeout} seconds), killing it.")
+                    except subprocess.CalledProcessError as e:
+                        print(f"Process failed with exit code {e.returncode}")
 
                     output.append(result.stdout)
             
         return output
+    
+    def coding_agent(self, input:str):
+        self.write_code(input)
+        commands = self.load_code()
+        self.execute(commands)
 
 
 if __name__ == "__main__":
-    with open("system_prompt.txt", "r") as f:
+    with open("cached_code\system_prompt.txt", "r") as f:
         prompt = f.read()
 
-    input = "Build the popular game Wordle on a React web app"
+    input = "Use python to build an interactive game of connect 4, make it have a GUI but play it yourself instead of awaiting user input. No infinite loops."
 
     agent = CodingAgent("gemini-2.5-flash", system_prompt=prompt)
 
